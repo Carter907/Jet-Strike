@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -28,10 +29,12 @@ public class Game extends ApplicationAdapter {
     private Player jet;
     Stage display;
 
+    Viewport view;
+
     @Override
     public void create() {
-
-        display = new Stage(new ScreenViewport());
+        view = new ScreenViewport();
+        display = new Stage(view);
 
         inputHandler = this.new InputHandler();
         Gdx.input.setInputProcessor(inputHandler);
@@ -63,10 +66,12 @@ public class Game extends ApplicationAdapter {
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        view.getCamera().position.set(jet.getX()+jet.getOriginX(), jet.getY()+jet.getOriginY(), 0);
         inputHandler.handleInput();
         display.act();
         display.draw();
-
+        view.apply();
+        batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
         font.draw(batch, "Welcome to Jet Strike", 100, 100);
         batch.end();
@@ -85,8 +90,8 @@ public class Game extends ApplicationAdapter {
     private class InputHandler implements InputProcessor {
         private boolean keyPressed;
         private int keycode;
-        private int mouseX;
-        private int mouseY;
+        private float mouseX;
+        private float mouseY;
         private float mouseDirection;
 
         @Override
@@ -135,9 +140,10 @@ public class Game extends ApplicationAdapter {
         }
 
         public void handleInput() {
-
-            mouseX = Gdx.input.getX();
-            mouseY = -1 * (Gdx.input.getY() - Gdx.graphics.getHeight());
+            Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            mousePosition = view.unproject(mousePosition);
+            mouseX = mousePosition.x;
+            mouseY = mousePosition.y;
             setJetDirection();
             updateProjectiles();
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Projectile extends Actor {
 
     public static final float maxDistance = 400;
+    public static final float pixelsPerSecond = 500;
     private ShapeRenderer renderer;
     private float path;
     private long distanceTraveled;
@@ -45,8 +46,8 @@ public class Projectile extends Actor {
 
         if (distanceTraveled > maxDistance)
             return false;
-        this.setX((float) (this.getX() + Math.cos(Math.toRadians(path))));
-        this.setY((float) (this.getY() + Math.sin(Math.toRadians(path))));
+        this.setX((float) (this.getX() + pixelsPerSecond/30*Math.cos(Math.toRadians(path))));
+        this.setY((float) (this.getY() + pixelsPerSecond/30*Math.sin(Math.toRadians(path))));
         this.distanceTraveled += 1;
         return true;
     }
