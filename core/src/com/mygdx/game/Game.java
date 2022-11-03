@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -23,13 +25,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Game extends ApplicationAdapter {
 
     private BitmapFont font;
+    private BitmapFont font2;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private InputHandler inputHandler;
     private Player jet;
-    Stage display;
+    private Enemy enemyJet;
+    private Stage display;
 
-    Viewport view;
+    private Viewport view;
 
     @Override
     public void create() {
@@ -40,17 +44,24 @@ public class Game extends ApplicationAdapter {
         Gdx.input.setInputProcessor(inputHandler);
 
         font = new BitmapFont(Gdx.files.internal("dontWorry.fnt"));
+        font2 = new BitmapFont(Gdx.files.internal("font2.fnt"));
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
         jet = new Player();
         jet.setSize(75, 40);
         jet.setPosition(100, 100);
-        jet.setAlign(Align.center);
         jet.setOrigin(Align.center);
+        jet.setForceField(new ForceField(jet));
+
+        enemyJet = new Enemy();
+        enemyJet.setSize(75, 40);
+        enemyJet.setPosition(MathUtils.random(500), MathUtils.random(500));
+        enemyJet.setOrigin(Align.center);
+        enemyJet.setForceField(new ForceField(enemyJet));
 
         display.addActor(jet);
-        display.addActor(jet.new ForceField());
+        display.addActor(enemyJet);
 
     }
     @Override
@@ -73,7 +84,8 @@ public class Game extends ApplicationAdapter {
         view.apply();
         batch.setProjectionMatrix(view.getCamera().combined);
         batch.begin();
-        font.draw(batch, "Welcome to Jet Strike", 100, 100);
+        font.draw(batch, "Welcome to JetStrike", 100, 100);
+        font2.draw(batch, "JetStrike is a jet fighter game where you destroy enemy jets!", 100, 60);
         batch.end();
 
     }

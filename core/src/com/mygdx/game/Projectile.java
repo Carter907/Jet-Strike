@@ -48,7 +48,7 @@ public class Projectile extends Actor {
             return false;
         this.setX((float) (this.getX() + pixelsPerSecond/30*Math.cos(Math.toRadians(path))));
         this.setY((float) (this.getY() + pixelsPerSecond/30*Math.sin(Math.toRadians(path))));
-        this.distanceTraveled += 1;
+        this.distanceTraveled += 1*pixelsPerSecond/30;
         return true;
     }
 
