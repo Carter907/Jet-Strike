@@ -7,11 +7,6 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         google()
     }
-    dependencies {
-
-    }
-
-
 }
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
@@ -41,16 +36,22 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
     }
+
+
 }
 
 project(":desktop") {
     apply plugin: "java-library"
     apply plugin: "com.github.johnrengelman.shadow"
     dependencies {
+
         implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        
+
+
     }
 
 }
@@ -61,7 +62,8 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+
     }
 
 }

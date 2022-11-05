@@ -28,7 +28,7 @@ public class ForceField extends Actor {
         shapeRenderer.translate(getX(), getY(), 0);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.circle(ship.getX() + ship.getOriginX(), ship.getY() + ship.getOriginY(), 50);
+        shapeRenderer.circle(ship.getX() + ship.getOriginX(), ship.getY() + ship.getOriginY(), ship.getWidth() > ship.getHeight() ? ship.getWidth() : ship.getHeight());
         shapeRenderer.setColor(color);
         shapeRenderer.end();
         batch.begin();

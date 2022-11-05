@@ -1,0 +1,27 @@
+
+SpriteSheet.png
+size: 256, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+enemyChoppa
+  rotate: false
+  xy: 74, 14
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: -1
+rocket
+  rotate: false
+  xy: 2, 2
+  size: 38, 10
+  orig: 38, 10
+  offset: 0, 0
+  index: -1
+ship
+  rotate: false
+  xy: 2, 14
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: -1

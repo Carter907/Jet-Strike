@@ -1,0 +1,76 @@
+
+PlayerExhaustAnimation.png
+size: 1024, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+sprite
+  rotate: false
+  xy: 2, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 9
+sprite
+  rotate: false
+  xy: 74, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 1
+sprite
+  rotate: false
+  xy: 146, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 6
+sprite
+  rotate: false
+  xy: 218, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 3
+sprite
+  rotate: false
+  xy: 290, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 8
+sprite
+  rotate: false
+  xy: 362, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 0
+sprite
+  rotate: false
+  xy: 434, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 5
+sprite
+  rotate: false
+  xy: 506, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 2
+sprite
+  rotate: false
+  xy: 578, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 7
+sprite
+  rotate: false
+  xy: 650, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 4
