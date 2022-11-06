@@ -57,14 +57,8 @@ public class Game extends ApplicationAdapter {
         jet.setOrigin(Align.center);
         jet.setForceField(new ForceField(jet));
 
-        enemyJet = new Enemy();
-        enemyJet.setSize(75, 40);
-        enemyJet.setPosition(MathUtils.random(500), MathUtils.random(500));
-        enemyJet.setOrigin(Align.center);
-        enemyJet.setForceField(new ForceField(enemyJet));
 
         display.addActor(jet);
-        display.addActor(enemyJet);
 
     }
 
@@ -189,6 +183,15 @@ public class Game extends ApplicationAdapter {
 
                     case Input.Keys.W:
                         moveJet(4.5f);
+                        break;
+                    case Input.Keys.R:
+                        enemyJet = new Enemy();
+                        enemyJet.setSize(150, 60);
+                        enemyJet.setPosition(MathUtils.random(500), MathUtils.random(500));
+                        enemyJet.setOrigin(Align.center);
+                        enemyJet.setForceField(new ForceField(enemyJet));
+
+                        display.addActor(enemyJet);
                         break;
                     default:
 

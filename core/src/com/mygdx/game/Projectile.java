@@ -16,7 +16,7 @@ public class Projectile extends Actor {
 
 
         ROCKET_EXPLOSION(new Animation<TextureAtlas.AtlasRegion>(
-                1/12f,
+                1/15f,
                 new TextureAtlas(Gdx.files.internal("RocketAnimations/RocketExplosion.atlas")).getRegions(),
                 Animation.PlayMode.LOOP), new TextureAtlas(Gdx.files.internal("RocketAnimations/RocketExplosion.atlas")).getRegions().size);
 
