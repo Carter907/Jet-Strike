@@ -41,7 +41,7 @@ public class Game extends ApplicationAdapter {
     private TextureAtlas sprites;
     private Stage display;
     private Stage ui;
-
+    private TiledMap map;
     private TiledMapRenderer mapRenderer;
     private Viewport viewDisplay;
     private Viewport viewUI;
@@ -55,6 +55,7 @@ public class Game extends ApplicationAdapter {
         game = this;
         stateTime = 0;
         camera = new OrthographicCamera();
+        camera.zoom = .5f;
         viewDisplay = new ScreenViewport(camera);
         display = new Stage(viewDisplay);
         viewUI = new ExtendViewport(800,600);
@@ -69,7 +70,7 @@ public class Game extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         sprites = new TextureAtlas(Gdx.files.internal("SpriteAtlas/Sprites.atlas"));
 
-        TiledMap map = new TmxMapLoader().load("Maps/map.tmx");
+        map = new TmxMapLoader().load("Maps/blackhole.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1f, batch);
 
         jet = new Player();
@@ -118,6 +119,10 @@ public class Game extends ApplicationAdapter {
         font.draw(batch, "Welcome to JetStrike", 100, 100);
         font2.draw(batch, "JetStrike is a jet fighter game where you destroy enemy jets!", 100, 60);
         batch.end();
+
+        viewDisplay.apply();
+        display.act();
+        display.draw();
 
         viewUI.apply();
         ui.act();
@@ -225,6 +230,8 @@ public class Game extends ApplicationAdapter {
 
                         display.addActor(enemyJet);
                         break;
+                    case Input.Keys.G:
+                        jet.setPosition((Integer)map.getProperties().get("width")*16/2f, (Integer)map.getProperties().get("height")*16/2f);
                     default:
 
                         break;
