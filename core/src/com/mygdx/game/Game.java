@@ -88,9 +88,7 @@ public class Game extends ApplicationAdapter {
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        viewUI.apply();
-        ui.act();
-        ui.draw();
+
 
         viewDisplay.getCamera().position.set(jet.getX() + jet.getOriginX(), jet.getY() + jet.getOriginY(), 0);
         inputHandler.handleInput();
@@ -103,6 +101,10 @@ public class Game extends ApplicationAdapter {
         font.draw(batch, "Welcome to JetStrike", 100, 100);
         font2.draw(batch, "JetStrike is a jet fighter game where you destroy enemy jets!", 100, 60);
         batch.end();
+
+        viewUI.apply();
+        ui.act();
+        ui.draw();
 
     }
 
