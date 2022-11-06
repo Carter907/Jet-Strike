@@ -49,7 +49,7 @@ public class Game extends ApplicationAdapter {
         font2 = new BitmapFont(Gdx.files.internal("Fonts/font2.fnt"));
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        atlas = new TextureAtlas(Gdx.files.internal("SpriteAtlas/SpriteSheet.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("SpriteAtlas/Sprites.atlas"));
 
         jet = new Player();
         jet.setSize(140, 60);
@@ -127,6 +127,7 @@ public class Game extends ApplicationAdapter {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
             return false;
         }
 
@@ -137,7 +138,21 @@ public class Game extends ApplicationAdapter {
 
         @Override
         public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                System.out.println(mouseDirection);
+
+                Projectile bullet = new Projectile(
+
+                        (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(mouseDirection)))),
+                        (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(mouseDirection)))),
+                        mouseDirection,
+                        Projectile.ProjectileTypes.ROCKET
+                );
+
+                display.addActor(bullet);
+                System.out.println(display.getActors());
+            }
+            return true;
         }
 
         @Override
@@ -161,20 +176,7 @@ public class Game extends ApplicationAdapter {
             setJetDirection();
             updateProjectiles();
             checkProjectiles();
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                System.out.println(mouseDirection);
 
-                Projectile bullet = new Projectile(
-
-                        (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(mouseDirection)))),
-                        (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(mouseDirection)))),
-                        mouseDirection,
-                        Projectile.ProjectileTypes.ROCKET
-                );
-
-                display.addActor(bullet);
-                System.out.println(display.getActors());
-            }
 
 
             if (keyPressed) {
