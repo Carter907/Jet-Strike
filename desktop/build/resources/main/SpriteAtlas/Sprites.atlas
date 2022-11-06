@@ -1,27 +1,34 @@
 
 Sprites.png
-size: 128, 64
+size: 256, 64
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-enemyChoppa
+block
   rotate: false
   xy: 2, 2
-  size: 58, 26
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+enemyChoppa
+  rotate: false
+  xy: 74, 32
+  size: 70, 30
   orig: 70, 30
-  offset: 9, 2
+  offset: 0, 0
   index: -1
 rocket
   rotate: false
-  xy: 74, 50
-  size: 37, 9
+  xy: 2, 20
+  size: 38, 10
   orig: 38, 10
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 ship
   rotate: false
-  xy: 2, 30
-  size: 70, 29
+  xy: 2, 32
+  size: 70, 30
   orig: 70, 30
   offset: 0, 0
   index: -1

@@ -35,11 +35,8 @@ public abstract class Ship extends Actor {
 
     public Ship(float x, float y, TextureAtlas.AtlasRegion sprite) {
 
-        this.setX(x);
-        this.setY(y);
         this.sprite = sprite;
-        setBounds(this.sprite.getRegionX(), this.sprite.getRegionY(),
-                this.sprite.getRegionWidth(), this.sprite.getRegionHeight());
+        this.setBounds(x,y,sprite.getRegionWidth(), sprite.getRegionHeight());
     }
 
     @Override
@@ -54,7 +51,14 @@ public abstract class Ship extends Actor {
                     getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
     }
-
+    @Override
+    public void setWidth(float width) {
+        throw new IllegalStateException("cannot change the width of a Ship");
+    }
+    @Override
+    public void setHeight(float height) {
+        throw new IllegalStateException("cannot change the height of a Ship");
+    }
     public Color getForceFieldColor() {
         return forceFieldColor;
     }

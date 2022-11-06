@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -24,16 +23,16 @@ public class Player extends Ship {
     private final Color forceFieldColor = Color.GREEN;
     private final TextureAtlas animationAtlas = new TextureAtlas(Gdx.files.internal(PlayerAnimations.JET_EXHAUST.getPath()));
     private final Animation<TextureAtlas.AtlasRegion> exhaustAnimation = new Animation<>(1/15f, animationAtlas.getRegions(), Animation.PlayMode.LOOP );
-    private final TextureAtlas.AtlasRegion sprite = Game.game.getAtlas().findRegion("ship");
+    private final TextureAtlas.AtlasRegion sprite = Game.game.getSprites().findRegion("ship");
     public Player() {
-        super(0,0, Game.game.getAtlas().findRegion("ship"));
+        super(0,0, Game.game.getSprites().findRegion("ship"));
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(exhaustAnimation);
 
     }
 
     public Player(float x, float y) {
-        super(x,y, Game.game.getAtlas().findRegion("ship"));
+        super(x,y, Game.game.getSprites().findRegion("ship"));
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(exhaustAnimation);
     }

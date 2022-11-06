@@ -6,18 +6,24 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.*;
-import com.jogamp.graph.font.Font;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.Arrays;
 
@@ -32,20 +38,24 @@ public class Game extends ApplicationAdapter {
     private InputHandler inputHandler;
     private Player jet;
     private Enemy enemyJet;
-    private TextureAtlas atlas;
+    private TextureAtlas sprites;
     private Stage display;
     private Stage ui;
 
+    private TiledMapRenderer mapRenderer;
     private Viewport viewDisplay;
     private Viewport viewUI;
     private Label killCount;
+
+    private OrthographicCamera camera;
 
     @Override
     public void create() {
 
         game = this;
         stateTime = 0;
-        viewDisplay = new ScreenViewport();
+        camera = new OrthographicCamera();
+        viewDisplay = new ScreenViewport(camera);
         display = new Stage(viewDisplay);
         viewUI = new ExtendViewport(800,600);
         ui = new Stage(viewUI);
@@ -57,19 +67,24 @@ public class Game extends ApplicationAdapter {
         font2 = new BitmapFont(Gdx.files.internal("Fonts/font2.fnt"));
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        atlas = new TextureAtlas(Gdx.files.internal("SpriteAtlas/Sprites.atlas"));
+        sprites = new TextureAtlas(Gdx.files.internal("SpriteAtlas/Sprites.atlas"));
+
+        TiledMap map = new TmxMapLoader().load("Maps/map.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f, batch);
 
         jet = new Player();
-        jet.setSize(140, 60);
         jet.setPosition(100, 100);
         jet.setOrigin(Align.center);
         jet.setForceField(new ForceField(jet));
 
+        display.addActor(jet);
+
         Label.LabelStyle font1 = new Label.LabelStyle(font, Color.BLUE);
         killCount = new Label("Kill Count: ", font1);
         killCount.setPosition(20, ui.getViewport().getWorldHeight()-killCount.getHeight());
+
         ui.getActors().add(killCount);
-        display.addActor(jet);
+
 
     }
 
@@ -78,25 +93,27 @@ public class Game extends ApplicationAdapter {
         // See below for what true means.
         display.getViewport().update(width, height, true);
         ui.getViewport().update(width,height,true);
-
+        camera.update();
     }
 
     @Override
     public void render() {
+
         stateTime += Gdx.graphics.getDeltaTime();
-        Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl20.glViewport(0, 0, (int)camera.viewportWidth, (int)camera.viewportHeight);
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-
-
-        viewDisplay.getCamera().position.set(jet.getX() + jet.getOriginX(), jet.getY() + jet.getOriginY(), 0);
+        viewDisplay.setCamera(camera);
+        camera.position.set(jet.getX()+jet.getOriginX(), jet.getY()+jet.getOriginY(), 0);
+        camera.update();
+        mapRenderer.setView(camera);
+        mapRenderer.render();
         inputHandler.handleInput();
         viewDisplay.apply();
         display.act();
         display.draw();
 
-        batch.setProjectionMatrix(viewDisplay.getCamera().combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         font.draw(batch, "Welcome to JetStrike", 100, 100);
         font2.draw(batch, "JetStrike is a jet fighter game where you destroy enemy jets!", 100, 60);
@@ -179,8 +196,8 @@ public class Game extends ApplicationAdapter {
 
         public void handleInput() {
 
-            Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            mousePosition = viewDisplay.unproject(mousePosition);
+            Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mousePosition = camera.unproject(mousePosition);
             mouseX = mousePosition.x;
             mouseY = mousePosition.y;
             projectiles = getProjectiles();
@@ -202,8 +219,7 @@ public class Game extends ApplicationAdapter {
                         break;
                     case Input.Keys.R:
                         enemyJet = new Enemy();
-                        enemyJet.setSize(150, 60);
-                        enemyJet.setPosition(MathUtils.random(1000), MathUtils.random(1000));
+                        enemyJet.setPosition(mouseX,  mouseY);
                         enemyJet.setOrigin(Align.center);
                         enemyJet.setForceField(new ForceField(enemyJet));
 
@@ -212,6 +228,14 @@ public class Game extends ApplicationAdapter {
                     default:
 
                         break;
+                }
+                if (stateTime % 10 > -.2 && stateTime % 10 < .2) {
+                    enemyJet = new Enemy();
+                    enemyJet.setPosition(MathUtils.random(3000), MathUtils.random(3000));
+                    enemyJet.setOrigin(Align.center);
+                    enemyJet.setForceField(new ForceField(enemyJet));
+
+                    display.addActor(enemyJet);
                 }
             }
         }
@@ -244,7 +268,7 @@ public class Game extends ApplicationAdapter {
                         display.getActors().removeValue(projectile, false);
                         continue;
                     }
-                    if (ship.contains(projectile.getX(), projectile.getY())) {
+                    if (ship.contains(projectile.getX(), projectile.getY()) && ship instanceof Enemy) {
 
                         projectile.onShipCollision(ship);
                         break;
@@ -336,12 +360,12 @@ public class Game extends ApplicationAdapter {
         return stateTime;
     }
 
-    public TextureAtlas getAtlas() {
-        return atlas;
+    public TextureAtlas getSprites() {
+        return sprites;
     }
 
-    public void setAtlas(TextureAtlas atlas) {
-        this.atlas = atlas;
+    public void setSprites(TextureAtlas sprites) {
+        this.sprites = sprites;
     }
 
     public Viewport getView() {

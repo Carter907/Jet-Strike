@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
 
 public class Projectile extends Actor {
 
@@ -77,7 +76,7 @@ public class Projectile extends Actor {
         this.path = path;
         this.setRotation(path);
         this.distanceTraveled = 0;
-        this.sprite = Game.game.getAtlas().findRegion(projectileType.getRegion());
+        this.sprite = Game.game.getSprites().findRegion(projectileType.getRegion());
     }
 
     @Override
