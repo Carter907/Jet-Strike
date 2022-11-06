@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,9 +14,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
+import com.jogamp.graph.font.Font;
 
 import java.util.Arrays;
 
@@ -32,15 +34,21 @@ public class Game extends ApplicationAdapter {
     private Enemy enemyJet;
     private TextureAtlas atlas;
     private Stage display;
+    private Stage ui;
 
-    private Viewport view;
+    private Viewport viewDisplay;
+    private Viewport viewUI;
+    private Label killCount;
 
     @Override
     public void create() {
+
         game = this;
         stateTime = 0;
-        view = new ScreenViewport();
-        display = new Stage(view);
+        viewDisplay = new ScreenViewport();
+        display = new Stage(viewDisplay);
+        viewUI = new ExtendViewport(800,600);
+        ui = new Stage(viewUI);
 
         inputHandler = this.new InputHandler();
         Gdx.input.setInputProcessor(inputHandler);
@@ -57,7 +65,10 @@ public class Game extends ApplicationAdapter {
         jet.setOrigin(Align.center);
         jet.setForceField(new ForceField(jet));
 
-
+        Label.LabelStyle font1 = new Label.LabelStyle(font, Color.BLUE);
+        killCount = new Label("Kill Count: ", font1);
+        killCount.setPosition(20, ui.getViewport().getWorldHeight()-killCount.getHeight());
+        ui.getActors().add(killCount);
         display.addActor(jet);
 
     }
@@ -66,6 +77,8 @@ public class Game extends ApplicationAdapter {
     public void resize(int width, int height) {
         // See below for what true means.
         display.getViewport().update(width, height, true);
+        ui.getViewport().update(width,height,true);
+
     }
 
     @Override
@@ -75,12 +88,17 @@ public class Game extends ApplicationAdapter {
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        view.getCamera().position.set(jet.getX() + jet.getOriginX(), jet.getY() + jet.getOriginY(), 0);
+        viewUI.apply();
+        ui.act();
+        ui.draw();
+
+        viewDisplay.getCamera().position.set(jet.getX() + jet.getOriginX(), jet.getY() + jet.getOriginY(), 0);
         inputHandler.handleInput();
+        viewDisplay.apply();
         display.act();
         display.draw();
-        view.apply();
-        batch.setProjectionMatrix(view.getCamera().combined);
+
+        batch.setProjectionMatrix(viewDisplay.getCamera().combined);
         batch.begin();
         font.draw(batch, "Welcome to JetStrike", 100, 100);
         font2.draw(batch, "JetStrike is a jet fighter game where you destroy enemy jets!", 100, 60);
@@ -102,6 +120,7 @@ public class Game extends ApplicationAdapter {
         private Ship[] ships;
         private Projectile[] projectiles;
         private int keycode;
+        private boolean mousePressing;
         private float mouseX;
         private float mouseY;
         private float mouseDirection;
@@ -127,32 +146,22 @@ public class Game extends ApplicationAdapter {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-            return false;
+            System.out.println("down");
+            mousePressing = true;
+            return true;
         }
 
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return false;
+            System.out.println("up");
+            mousePressing = false;
+            return true;
         }
 
         @Override
         public boolean touchDragged(int screenX, int screenY, int pointer) {
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                System.out.println(mouseDirection);
 
-                Projectile bullet = new Projectile(
-
-                        (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(mouseDirection)))),
-                        (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(mouseDirection)))),
-                        mouseDirection,
-                        Projectile.ProjectileTypes.ROCKET
-                );
-
-                display.addActor(bullet);
-                System.out.println(display.getActors());
-            }
-            return true;
+            return false;
         }
 
         @Override
@@ -167,8 +176,9 @@ public class Game extends ApplicationAdapter {
         }
 
         public void handleInput() {
+
             Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            mousePosition = view.unproject(mousePosition);
+            mousePosition = viewDisplay.unproject(mousePosition);
             mouseX = mousePosition.x;
             mouseY = mousePosition.y;
             projectiles = getProjectiles();
@@ -177,7 +187,9 @@ public class Game extends ApplicationAdapter {
             updateProjectiles();
             checkProjectiles();
 
-
+            if (mousePressing) {
+                Projectile.shootProjectile(jet);
+            }
 
             if (keyPressed) {
 
@@ -189,7 +201,7 @@ public class Game extends ApplicationAdapter {
                     case Input.Keys.R:
                         enemyJet = new Enemy();
                         enemyJet.setSize(150, 60);
-                        enemyJet.setPosition(MathUtils.random(500), MathUtils.random(500));
+                        enemyJet.setPosition(MathUtils.random(1000), MathUtils.random(1000));
                         enemyJet.setOrigin(Align.center);
                         enemyJet.setForceField(new ForceField(enemyJet));
 
@@ -201,7 +213,6 @@ public class Game extends ApplicationAdapter {
                 }
             }
         }
-
         private Ship[] getShips() {
             Ship[] ships = new Ship[0];
             for (Actor actor : display.getActors()) {
@@ -233,8 +244,7 @@ public class Game extends ApplicationAdapter {
                     }
                     if (ship.contains(projectile.getX(), projectile.getY())) {
 
-                        display.getActors().removeValue(ship, false);
-                        projectile.setAnimation(Projectile.ProjectileAnimations.ROCKET_EXPLOSION);
+                        projectile.onShipCollision(ship);
                         break;
                     }
                 }
@@ -284,6 +294,38 @@ public class Game extends ApplicationAdapter {
         return enemyJet;
     }
 
+    public Stage getUi() {
+        return ui;
+    }
+
+    public void setUi(Stage ui) {
+        this.ui = ui;
+    }
+
+    public Viewport getViewDisplay() {
+        return viewDisplay;
+    }
+
+    public void setViewDisplay(Viewport viewDisplay) {
+        this.viewDisplay = viewDisplay;
+    }
+
+    public Viewport getViewUI() {
+        return viewUI;
+    }
+
+    public void setViewUI(Viewport viewUI) {
+        this.viewUI = viewUI;
+    }
+
+    public Label getKillCount() {
+        return killCount;
+    }
+
+    public void setKillCount(Label killCount) {
+        this.killCount = killCount;
+    }
+
     public void setEnemyJet(Enemy enemyJet) {
         this.enemyJet = enemyJet;
     }
@@ -301,11 +343,11 @@ public class Game extends ApplicationAdapter {
     }
 
     public Viewport getView() {
-        return view;
+        return viewDisplay;
     }
 
     public void setView(Viewport view) {
-        this.view = view;
+        this.viewDisplay = view;
     }
 
     public BitmapFont getFont() {

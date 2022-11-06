@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -55,6 +56,10 @@ public class Projectile extends Actor {
     }
 
     public static final float maxDistance = 400;
+
+    public static final float fireRate = 100;
+
+    public static float timeElapsed = 100;
     public static final float pixelsPerSecond = 500;
     private float path;
     private boolean exploded;
@@ -99,6 +104,28 @@ public class Projectile extends Actor {
         return true;
     }
 
+    public static void shootProjectile(Ship jet) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Game.game.getStateTime()*1000 >= Projectile.timeElapsed+Projectile.fireRate) {
+            System.out.println(jet.getRotation());
+
+            Projectile bullet = new Projectile(
+
+                    (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(jet.getRotation())))),
+                    (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(jet.getRotation())))),
+                    jet.getRotation(),
+                    Projectile.ProjectileTypes.ROCKET
+            );
+
+            Game.game.getDisplay().addActor(bullet);
+            Projectile.timeElapsed = Game.game.getStateTime()*1000;
+        }
+    }
+    public void onShipCollision(Ship ship) {
+        this.setAnimation(Projectile.ProjectileAnimations.ROCKET_EXPLOSION);
+        Game.game.getDisplay().getActors().removeValue(ship, false);
+        Enemy.killCount++;
+        Game.game.getKillCount().setText("Kill Count: " + Enemy.killCount);
+    }
     public Animation<TextureAtlas.AtlasRegion> getAnimation() {
         return animation;
     }

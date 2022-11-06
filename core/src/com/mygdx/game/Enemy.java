@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Enemy extends Ship {
 
+    public static int killCount = 0;
+
     private enum EnemyAnimations {
 
         CHOPPER_ANIMATION()
