@@ -16,14 +16,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.*;
-import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.Arrays;
 
@@ -45,7 +46,7 @@ public class Game extends ApplicationAdapter {
     private TiledMapRenderer mapRenderer;
     private Viewport viewDisplay;
     private Viewport viewUI;
-    private Label killCount;
+    private Label killCountLabel;
 
     private OrthographicCamera camera;
 
@@ -80,11 +81,12 @@ public class Game extends ApplicationAdapter {
 
         display.addActor(jet);
 
-        Label.LabelStyle font1 = new Label.LabelStyle(font, Color.BLUE);
-        killCount = new Label("Kill Count: ", font1);
-        killCount.setPosition(20, ui.getViewport().getWorldHeight()-killCount.getHeight());
 
-        ui.getActors().add(killCount);
+        Label.LabelStyle font1 = new Label.LabelStyle(font, Color.BLUE);
+        killCountLabel = new Label("Kill Count: " + Enemy.killCount, font1);
+        killCountLabel.setPosition(20, ui.getViewport().getWorldHeight()- killCountLabel.getHeight());
+
+        ui.getActors().add(killCountLabel);
 
 
     }
@@ -128,6 +130,8 @@ public class Game extends ApplicationAdapter {
         ui.act();
         ui.draw();
 
+
+
     }
 
     @Override
@@ -145,8 +149,11 @@ public class Game extends ApplicationAdapter {
         private Projectile[] projectiles;
         private int keycode;
         private boolean mousePressing;
-        private float mouseX;
-        private float mouseY;
+        private float mouseXUnproj;
+        private float mouseYUnproj;
+
+        private float mouseXProj;
+        private float mouseYProj;
         private float mouseDirection;
 
         @Override
@@ -201,15 +208,36 @@ public class Game extends ApplicationAdapter {
 
         public void handleInput() {
 
-            Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            mousePosition = camera.unproject(mousePosition);
-            mouseX = mousePosition.x;
-            mouseY = mousePosition.y;
+            Vector3 mousePositionUnprojected = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mousePositionUnprojected = camera.unproject(mousePositionUnprojected);
+            Vector3 mousePositionProjected = new Vector3(Gdx.input.getX(), -1*(Gdx.input.getY() - Gdx.graphics.getHeight()),0);
+            mouseXUnproj = mousePositionUnprojected.x;
+            mouseYUnproj = mousePositionUnprojected.y;
+            mouseXProj = mousePositionProjected.x;
+            mouseYProj = mousePositionProjected.y;
             projectiles = getProjectiles();
             ships = getShips();
             setJetDirection();
             updateProjectiles();
             checkProjectiles();
+
+//            if (Enemy.killCount % 10 == 0) {
+//                ScaleToAction scaleUp = new ScaleToAction();
+//                scaleUp.setScale(20f);
+//                scaleUp.setDuration(1f);
+//                MoveToAction moveToCenter = new MoveToAction();
+//                moveToCenter.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+//                moveToCenter.setDuration(1f);
+//                ScaleByAction scaleDown = new ScaleByAction();
+//                scaleDown.setAmount(2f);
+//                scaleDown.setDuration(1f);
+//                MoveToAction moveBack = new MoveToAction();
+//                moveBack.setPosition(0, Gdx.graphics.getHeight()-killCountLabel.getHeight());
+//                moveBack.setDuration(1f);
+//                killCountLabel.addAction(moveBack);
+//
+//
+//            }
 
             if (mousePressing) {
                 Projectile.shootProjectile(jet);
@@ -224,7 +252,7 @@ public class Game extends ApplicationAdapter {
                         break;
                     case Input.Keys.R:
                         enemyJet = new Enemy();
-                        enemyJet.setPosition(mouseX,  mouseY);
+                        enemyJet.setPosition(mouseXUnproj, mouseYUnproj);
                         enemyJet.setOrigin(Align.center);
                         enemyJet.setForceField(new ForceField(enemyJet));
 
@@ -307,8 +335,8 @@ public class Game extends ApplicationAdapter {
 
         public void setJetDirection() {
             mouseDirection = (float) Math.toDegrees(Math.atan2(
-                    mouseY - (jet.getY() + jet.getOriginY()),
-                    mouseX - (jet.getX() + jet.getOriginX())
+                    mouseYUnproj - (jet.getY() + jet.getOriginY()),
+                    mouseXUnproj - (jet.getX() + jet.getOriginX())
             ));
             jet.setRotation(mouseDirection);
         }
@@ -352,11 +380,11 @@ public class Game extends ApplicationAdapter {
     }
 
     public Label getKillCount() {
-        return killCount;
+        return killCountLabel;
     }
 
     public void setKillCount(Label killCount) {
-        this.killCount = killCount;
+        this.killCountLabel = killCount;
     }
 
     public void setEnemyJet(Enemy enemyJet) {

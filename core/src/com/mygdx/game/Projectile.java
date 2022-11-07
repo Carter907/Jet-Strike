@@ -64,6 +64,7 @@ public class Projectile extends Actor {
     private boolean exploded;
     private Animation<TextureAtlas.AtlasRegion> animation;
     private ProjectileAnimations animationType;
+    private float animationTime;
     private long distanceTraveled;
     private ProjectileTypes projectileType;
     private TextureRegion sprite;
@@ -81,13 +82,14 @@ public class Projectile extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        animationTime += Gdx.graphics.getDeltaTime();
         if (animation == null)
             batch.draw(sprite, getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         else if (animationType != null){
-            TextureAtlas.AtlasRegion keyFrame = animation.getKeyFrame(Game.game.getStateTime());
+            TextureAtlas.AtlasRegion keyFrame = animation.getKeyFrame(animationTime);
             batch.draw(keyFrame,getX()-keyFrame.getRegionWidth()/2,getY()-keyFrame.getRegionHeight()/2);
-            if (animation.getKeyFrameIndex(Game.game.getStateTime()) == animationType.getFrameCount()-1)
+            if (animation.getKeyFrameIndex(animationTime) == animationType.getFrameCount()-1)
                 exploded = true;
 
         }
@@ -130,10 +132,12 @@ public class Projectile extends Actor {
     }
 
     public void setAnimation(Animation<TextureAtlas.AtlasRegion> animation) {
+        animationTime = 0;
         this.animation = animation;
     }
 
     public void setAnimation(ProjectileAnimations projectileAnimation) {
+        this.animationTime = 0;
         this.animationType = projectileAnimation;
         this.animation = projectileAnimation.getAnimation();
     }
