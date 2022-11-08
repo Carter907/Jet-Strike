@@ -13,6 +13,7 @@ import com.mygdx.game.actors.Ship;
 
 public abstract class Projectile extends Actor {
 
+
     public enum ProjectileType {
         ROCKET,
         BULLET;
@@ -26,8 +27,9 @@ public abstract class Projectile extends Actor {
     private float path;
     private long distanceTraveled;
     private TextureRegion sprite;
+    private Ship originShip;
 
-    public Projectile(float x, float y, float path, TextureRegion sprite, float maxDistance, float fireRate, float pixelsPerSecond) {
+    public Projectile(float x, float y, float path, TextureRegion sprite, Ship originShip, float maxDistance, float fireRate, float pixelsPerSecond) {
 
         this.setX(x);
         this.setY(y);
@@ -40,6 +42,7 @@ public abstract class Projectile extends Actor {
         this.maxDistance = maxDistance;
         this.fireRate = fireRate;
         this.pixelsPerSecond = pixelsPerSecond;
+        this.originShip = originShip;
     }
 
     @Override
@@ -111,5 +114,11 @@ public abstract class Projectile extends Actor {
         this.sprite = sprite;
     }
 
+    public Ship getOriginShip() {
+        return originShip;
+    }
 
+    public void setOriginShip(Ship originShip) {
+        this.originShip = originShip;
+    }
 }

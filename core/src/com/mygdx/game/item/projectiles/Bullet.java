@@ -30,8 +30,8 @@ public class Bullet extends Projectile {
 
     private boolean exploded;
 
-    public Bullet(float x, float y, float path) {
-        super(x, y, path, sprite, maxDistance, fireRate, pixelsPerSecond);
+    public Bullet(float x, float y, float path, Ship originShip) {
+        super(x, y, path, sprite, originShip, maxDistance, fireRate, pixelsPerSecond);
     }
 
     @Override
@@ -42,9 +42,14 @@ public class Bullet extends Projectile {
             if (ship instanceof Player)
                 ((Player)ship).setDead(true);
             Game.game.getDisplay().getActors().removeValue(ship, false);
+            if (this.getOriginShip() instanceof Player) {
+                Enemy.killCount++;
+                Game.game.getKillCount().setText("Kill Count: " + Enemy.killCount);
+            }
         }
-        Enemy.killCount++;
-        Game.game.getKillCount().setText("Kill Count: " + Enemy.killCount);
+
+
+
     }
 
 
@@ -56,7 +61,7 @@ public class Bullet extends Projectile {
 
                     (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(jet.getRotation())))),
                     (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(jet.getRotation())))),
-                    jet.getRotation()
+                    jet.getRotation(), jet
             );
             Game.game.getDisplay().addActor(rocket);
             jet.setTimeSinceLastShot(Game.game.getStateTime() * 1000);
@@ -70,7 +75,7 @@ public class Bullet extends Projectile {
 
                     (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(+jet.getRotation())))),
                     (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(jet.getRotation())))),
-                    (float)(Math.random())*(100-accuracy)-15+jet.getRotation()
+                    (float)(Math.random())*(100-accuracy)-15+jet.getRotation(), jet
             );
             Game.game.getDisplay().addActor(rocket);
             jet.setTimeSinceLastShot(Game.game.getStateTime() * 1000);

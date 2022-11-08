@@ -2,8 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -21,18 +18,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.actors.Enemy;
 import com.mygdx.game.actors.Player;
-import com.mygdx.game.actors.Ship;
 import com.mygdx.game.item.ForceField;
-import com.mygdx.game.item.projectiles.Projectile;
-import com.mygdx.game.item.projectiles.Rocket;
-
-import java.util.Arrays;
 
 
 public class Game extends ApplicationAdapter {
 
     public static Game game;
-    private BitmapFont font;
+    private BitmapFont font1;
     private BitmapFont font2;
     private SpriteBatch batch;
     private float stateTime;
@@ -47,6 +39,7 @@ public class Game extends ApplicationAdapter {
     private Viewport viewDisplay;
     private Viewport viewUI;
     private Label killCountLabel;
+    private Label deathLabel;
     private OrthographicCamera camera;
 
     @Override
@@ -64,11 +57,12 @@ public class Game extends ApplicationAdapter {
         inputHandler = new InputHandler(this);
         Gdx.input.setInputProcessor(inputHandler);
 
-        font = new BitmapFont(Gdx.files.internal("Fonts/dontWorry.fnt"));
+        font1 = new BitmapFont(Gdx.files.internal("Fonts/dontWorry.fnt"));
         font2 = new BitmapFont(Gdx.files.internal("Fonts/font2.fnt"));
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         sprites = new TextureAtlas(Gdx.files.internal("SpriteAtlas/Sprites.atlas"));
+
 
 
         mapRenderer = new GameMapRenderer(GameMapRenderer.Maps.AT_SEA.getMap(), 1f, batch);
@@ -85,12 +79,17 @@ public class Game extends ApplicationAdapter {
         display.addActor(player);
 
 
-        Label.LabelStyle font1 = new Label.LabelStyle(font, Color.BLUE);
-        killCountLabel = new Label("Kill Count: " + Enemy.killCount, font1);
+        Label.LabelStyle style = new Label.LabelStyle(font1, Color.BLUE);
+        killCountLabel = new Label("Kill Count: " + Enemy.killCount, style);
         killCountLabel.setPosition(20, ui.getViewport().getWorldHeight() - killCountLabel.getHeight());
 
+        Label.LabelStyle style0 = new Label.LabelStyle(font1, Color.RED);
+        deathLabel = new Label("you have died\n please press 'g' to restart",style0);
+        deathLabel.setOrigin(Align.center);
+        deathLabel.setPosition(ui.getViewport().getWorldWidth()/2, ui.getViewport().getWorldHeight()/2);
+        deathLabel.setVisible(false);
         ui.getActors().add(killCountLabel);
-
+        ui.getActors().add(deathLabel);
 
     }
 
@@ -121,7 +120,7 @@ public class Game extends ApplicationAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Welcome to JetStrike", 100, 100);
+        font1.draw(batch, "Welcome to JetStrike", 100, 100);
         font2.draw(batch, "JetStrike is a player fighter game where you destroy enemy jets!", 100, 60);
         batch.end();
 
@@ -157,6 +156,17 @@ public class Game extends ApplicationAdapter {
         return camera;
     }
 
+    public void setKillCountLabel(Label killCountLabel) {
+        this.killCountLabel = killCountLabel;
+    }
+
+    public Label getDeathLabel() {
+        return deathLabel;
+    }
+
+    public void setDeathLabel(Label deathLabel) {
+        this.deathLabel = deathLabel;
+    }
 
     public BitmapFont getFont2() {
         return font2;
@@ -226,12 +236,12 @@ public class Game extends ApplicationAdapter {
         this.viewDisplay = view;
     }
 
-    public BitmapFont getFont() {
-        return font;
+    public BitmapFont getFont1() {
+        return font1;
     }
 
-    public void setFont(BitmapFont font) {
-        this.font = font;
+    public void setFont1(BitmapFont font1) {
+        this.font1 = font1;
     }
 
     public SpriteBatch getBatch() {

@@ -28,8 +28,8 @@ public class Rocket extends Projectile {
 
     private boolean exploded;
 
-    public Rocket(float x, float y, float path) {
-        super(x, y, path, sprite, maxDistance, fireRate, pixelsPerSecond);
+    public Rocket(float x, float y, float path, Ship originShip) {
+        super(x, y, path, sprite, originShip, maxDistance, fireRate, pixelsPerSecond);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Rocket extends Projectile {
 
                     (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(jet.getRotation())))),
                     (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(jet.getRotation())))),
-                    jet.getRotation()
+                    jet.getRotation(), jet
             );
             Game.game.getDisplay().addActor(rocket);
             jet.setTimeSinceLastShot(Game.game.getStateTime() * 1000);

@@ -90,12 +90,12 @@ public class InputHandler extends InputAdapter {
         checkProjectiles();
         Enemy.AgroAllEnemies(game.getPlayer().getX(), game.getPlayer().getY(), 3f);
 
+        game.getDeathLabel().setVisible(game.getPlayer().isDead());
+
         if (mousePressing) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                 game.getPlayer().shootProjectile(Projectile.ProjectileType.ROCKET,0);
         }
-
-
 
         if (keyPressed) {
                 if (keycodes.contains(Input.Keys.W) && keycodes.contains(Input.Keys.SHIFT_LEFT))
