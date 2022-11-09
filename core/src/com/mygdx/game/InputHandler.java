@@ -89,8 +89,15 @@ public class InputHandler extends InputAdapter {
         updateProjectiles();
         checkProjectiles();
         Enemy.AgroAllEnemies(game.getPlayer().getX(), game.getPlayer().getY(), 3f);
-
+        if (!game.getDisplay().getActors().contains(game.getPlayer(), false))
+            game.getPlayer().setDead(true);
         game.getDeathLabel().setVisible(game.getPlayer().isDead());
+        if (game.getPlayer().isDead()) {
+
+            if (keycodes.contains(Input.Keys.G))
+                restartGame();
+            return;
+        }
 
         if (mousePressing) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -102,10 +109,9 @@ public class InputHandler extends InputAdapter {
                     game.getPlayer().moveShip(mouseDirection,6f);
                 if (keycodes.contains(Input.Keys.W))
                     game.getPlayer().moveShip(mouseDirection,4.5f);
-                if (keycodes.contains(Input.Keys.R))
+                if (keycodes.contains(Input.Keys.R) && game.getPlayer().isGodMode())
                     Enemy.spawnEnemy(mouseXUnproj, mouseYUnproj);
-                if (keycodes.contains(Input.Keys.G))
-                    restartGame();
+
         }
         if (game.getStateTime() % 10 > -.2 && game.getStateTime() % 10 < .2) {
             Enemy.spawnEnemy((float) (-1000 + Math.random() * 1500), (float) (-1000 + Math.random() * 1500));
@@ -114,6 +120,8 @@ public class InputHandler extends InputAdapter {
 
     private void restartGame() {
         game.getDisplay().getActors().removeAll(ships,false);
+        Enemy.killCount = 0;
+        game.getKillCountLabel().setText("Kill Count: " + Enemy.killCount);
         game.setPlayer(restartPlayer(new Player(game.getMapRenderer().getMapHeight() * 16 / 2f, game.getMapRenderer().getMapHeight() * 16 / 2f)));
     }
 

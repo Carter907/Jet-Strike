@@ -10,6 +10,8 @@ import com.mygdx.game.GameAnimation;
 import com.mygdx.game.item.projectiles.Rocket;
 
 public class Player extends Ship {
+
+
     public enum PlayerAnimations {
         JET_EXHAUST;
 
@@ -18,12 +20,14 @@ public class Player extends Ship {
         }
 
     }
+    private boolean godMode;
     private boolean dead;
     private final Color forceFieldColor = Color.GREEN;
 
     public Player() {
         super(0, 0, Game.game.getSprites().findRegion("ship"));
         this.dead = false;
+        this.godMode = false;
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(PlayerAnimations.JET_EXHAUST.getAnimation());
 
@@ -32,6 +36,7 @@ public class Player extends Ship {
     public Player(float x, float y) {
         super(x, y, Game.game.getSprites().findRegion("ship"));
         this.dead = false;
+        this.godMode = false;
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(PlayerAnimations.JET_EXHAUST.getAnimation());
     }
@@ -48,6 +53,14 @@ public class Player extends Ship {
 
         }
         return null;
+    }
+
+    public boolean isGodMode() {
+        return godMode;
+    }
+
+    public void setGodMode(boolean godMode) {
+        this.godMode = godMode;
     }
 
     public boolean isDead() {
