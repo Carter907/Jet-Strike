@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Game;
+import screens.GameScreen;
 import com.mygdx.game.GameAnimation;
 import com.mygdx.game.item.ForceField;
 import com.mygdx.game.item.projectiles.Bullet;
@@ -60,7 +60,7 @@ public abstract class Ship extends Actor {
             batch.draw(this.sprite, getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         } else {
-            batch.draw(this.animation.getKeyFrame(Game.game.getStateTime()), getX(), getY(), getOriginX(),
+            batch.draw(this.animation.getKeyFrame(GameScreen.game.getStateTime()), getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
     }

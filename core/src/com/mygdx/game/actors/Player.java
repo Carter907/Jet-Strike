@@ -1,15 +1,13 @@
 package com.mygdx.game.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.Game;
+import screens.GameScreen;
 import com.mygdx.game.GameAnimation;
-import com.mygdx.game.item.projectiles.Rocket;
 
 public class Player extends Ship {
+
+
 
 
     public enum PlayerAnimations {
@@ -21,11 +19,13 @@ public class Player extends Ship {
 
     }
     private boolean godMode;
+
+    private int coins;
     private boolean dead;
     private final Color forceFieldColor = Color.GREEN;
 
     public Player() {
-        super(0, 0, Game.game.getSprites().findRegion("ship"));
+        super(0, 0, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/ship"));
         this.dead = false;
         this.godMode = false;
         this.setForceFieldColor(forceFieldColor);
@@ -34,7 +34,7 @@ public class Player extends Ship {
     }
 
     public Player(float x, float y) {
-        super(x, y, Game.game.getSprites().findRegion("ship"));
+        super(x, y, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/ship"));
         this.dead = false;
         this.godMode = false;
         this.setForceFieldColor(forceFieldColor);
@@ -48,13 +48,20 @@ public class Player extends Ship {
             case JET_EXHAUST:
                 return new GameAnimation(
                         1 / 15f,
-                        new TextureAtlas(Gdx.files.internal("PlayerAnimations/PlayerExhaustAnimation.atlas")).getRegions(),
+                        GameScreen.game.getGameStart().getTextureAtlas().findRegions("shipExhaustImages/sprite"),
                         Animation.PlayMode.LOOP);
 
         }
         return null;
     }
 
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
     public boolean isGodMode() {
         return godMode;
     }

@@ -8,16 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntSet;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.actors.Enemy;
 import com.mygdx.game.actors.Player;
 import com.mygdx.game.actors.Ship;
 import com.mygdx.game.item.ForceField;
+import com.mygdx.game.item.interactables.Coin;
+import com.mygdx.game.item.interactables.Interactable;
 import com.mygdx.game.item.projectiles.Projectile;
+import screens.GameScreen;
 
 public class InputHandler extends InputAdapter {
     private boolean keyPressed;
     private Array<Ship> ships;
     private Array<Projectile> projectiles;
+
+    private Array<Interactable> interactables;
     private IntSet keycodes = new IntSet(4);
     private boolean mousePressing;
     private float mouseXUnproj;
@@ -25,8 +31,9 @@ public class InputHandler extends InputAdapter {
     private float mouseXProj;
     private float mouseYProj;
     private float mouseDirection;
-    private Game game;
-    public InputHandler(Game game) {
+    private GameScreen game;
+
+    public InputHandler(GameScreen game) {
         this.game = game;
     }
 
@@ -77,18 +84,21 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        return false;
+
+        screens.GameScreen.game.getCamera().zoom = amountX / 10f;
+        return true;
     }
 
     public void handleInput() {
 
         handleMousePosition();
-        projectiles = sortProjectiles();
-        ships = sortShips();
+        projectiles = findProjectiles();
+        ships = findShips();
         mouseDirection = game.getPlayer().getMouseDirection(mouseXUnproj, mouseYUnproj);
         updateProjectiles();
         checkProjectiles();
         Enemy.AgroAllEnemies(game.getPlayer().getX(), game.getPlayer().getY(), 3f);
+
         if (!game.getDisplay().getActors().contains(game.getPlayer(), false))
             game.getPlayer().setDead(true);
         game.getDeathLabel().setVisible(game.getPlayer().isDead());
@@ -101,32 +111,48 @@ public class InputHandler extends InputAdapter {
 
         if (mousePressing) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                game.getPlayer().shootProjectile(Projectile.ProjectileType.ROCKET,0);
+                game.getPlayer().shootProjectile(Projectile.ProjectileType.ROCKET, 0);
         }
 
         if (keyPressed) {
-                if (keycodes.contains(Input.Keys.W) && keycodes.contains(Input.Keys.SHIFT_LEFT))
-                    game.getPlayer().moveShip(mouseDirection,6f);
-                if (keycodes.contains(Input.Keys.W))
-                    game.getPlayer().moveShip(mouseDirection,4.5f);
-                if (keycodes.contains(Input.Keys.R) && game.getPlayer().isGodMode())
-                    Enemy.spawnEnemy(mouseXUnproj, mouseYUnproj);
+            if (keycodes.contains(Input.Keys.W) && keycodes.contains(Input.Keys.SHIFT_LEFT))
+                game.getPlayer().moveShip(mouseDirection, 6f);
+            if (keycodes.contains(Input.Keys.W))
+                game.getPlayer().moveShip(mouseDirection, 4.5f);
+            if (keycodes.contains(Input.Keys.R) && game.getPlayer().isGodMode())
+                Enemy.spawnEnemy(mouseXUnproj, mouseYUnproj);
 
         }
-        if (game.getStateTime() % 10 > -.2 && game.getStateTime() % 10 < .2) {
-            Enemy.spawnEnemy((float) (-1000 + Math.random() * 1500), (float) (-1000 + Math.random() * 1500));
+        if (Enemy.enemyHandler.isRandomEnemySpawn()) {
+            System.out.println(game.getMapRenderer().getMapHeight());
+            System.out.println(game.getMapRenderer().getMapWidth());
+            Enemy.enemyHandler.getEnemySpawner().scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    Coin.addCoin(
+                            (float) (Math.random() * game.getMapRenderer().getMapWidth() * 16),
+                            (float) (Math.random() * game.getMapRenderer().getMapHeight() * 16),
+                    Coin.CoinType.NORMAL_COIN);
+                    Enemy.spawnEnemy(
+                            (float) (Math.random() * game.getMapRenderer().getMapWidth() * 16),
+                            (float) (Math.random() * game.getMapRenderer().getMapHeight()) * 16);
+                    Enemy.enemyHandler.setRandomEnemySpawn(true);
+                }
+            }, 1);
+            Enemy.enemyHandler.setRandomEnemySpawn(false);
         }
+
     }
 
     private void restartGame() {
-        game.getDisplay().getActors().removeAll(ships,false);
+        game.getDisplay().getActors().removeAll(ships, false);
         Enemy.killCount = 0;
         game.getKillCountLabel().setText("Kill Count: " + Enemy.killCount);
-        game.setPlayer(restartPlayer(new Player(game.getMapRenderer().getMapHeight() * 16 / 2f, game.getMapRenderer().getMapHeight() * 16 / 2f)));
+        game.setPlayer(restartPlayer(new Player(game.getMapRenderer().getSpawnPoint().x, game.getMapRenderer().getSpawnPoint().y)));
     }
 
     private Player restartPlayer(Player player) {
-        player = new Player();
+
         player.setOrigin(Align.center);
         player.setForceField(new ForceField(player));
         game.getDisplay().addActor(player);
@@ -145,25 +171,59 @@ public class InputHandler extends InputAdapter {
         mouseYProj = mousePositionProjected.y;
     }
 
-    private Array<Ship> sortShips() {
+    private Array<Ship> findShips() {
         Array<Ship> ships = new Array<>();
         for (Actor actor : game.getDisplay().getActors()) {
             if (actor instanceof Ship) {
-                ships.add((Ship)actor);
+                ships.add((Ship) actor);
             }
         }
         return ships;
     }
 
-    private Array<Projectile> sortProjectiles() {
+    private Array<Projectile> findProjectiles() {
         Array<Projectile> projectiles = new Array<>();
         for (Actor actor : game.getDisplay().getActors()) {
             if (actor instanceof Projectile) {
-                projectiles.add((Projectile)actor);
+                projectiles.add((Projectile) actor);
             }
         }
         return projectiles;
     }
+
+    private Array<Interactable> findInteractables() {
+
+        Array<Interactable> interactables = new Array<>();
+        for (Actor actor : game.getDisplay().getActors()) {
+            if (actor instanceof Interactable) {
+                interactables.add((Interactable) actor);
+            }
+        }
+        return interactables;
+
+    }
+
+    private void checkInteractables() {
+        for (Ship ship: ships) {
+            for (Interactable intera : interactables) {
+                ship.contains(intera.getX(), intera.getY());
+
+                game.getDisplay().getActors().removeValue(intera, false);
+                if (ship instanceof Player && intera instanceof Coin) {
+                    Player player = (Player) ship;
+                    player.setCoins(player.getCoins() + ((Coin)intera).getValue());
+
+                }
+
+            }
+        }
+
+
+    }
+    private void updateKillLabel(int kills) {
+        game.getCoinLabel().setText("kill count: " + kills);
+    }
+
 
     private void checkProjectiles() {
         for (Ship ship : ships)
@@ -180,6 +240,7 @@ public class InputHandler extends InputAdapter {
             }
 
     }
+
     private void updateProjectiles() {
 
         for (Actor actor : game.getDisplay().getActors()) {
@@ -196,8 +257,9 @@ public class InputHandler extends InputAdapter {
 
     public static float findDirection(float x1, float y1, float x2, float y2) {
 
-        return (float)Math.toDegrees(Math.atan2((y2-y1),(x2-x1)));
+        return (float) Math.toDegrees(Math.atan2((y2 - y1), (x2 - x1)));
     }
+
     public Array<Ship> getShips() {
         return ships;
     }
@@ -278,11 +340,11 @@ public class InputHandler extends InputAdapter {
         this.mouseDirection = mouseDirection;
     }
 
-    public Game getGame() {
+    public GameScreen getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGame(GameScreen GameScreen) {
+        this.game = GameScreen;
     }
 }

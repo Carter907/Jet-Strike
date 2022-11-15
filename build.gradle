@@ -16,6 +16,7 @@ plugins {
 allprojects {
 
     apply plugin: "eclipse"
+    apply plugin: "java"
 
     version = '1.0'
     ext {
@@ -36,6 +37,9 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
     }
+    dependencies {
+        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    }
 
 
 }
@@ -46,8 +50,6 @@ project(":desktop") {
     dependencies {
 
         implementation project(":core")
-        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        implementation "com.googlecode.json-simple:json-simple:1.1.1"
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
@@ -62,7 +64,6 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         implementation "com.googlecode.json-simple:json-simple:1.1.1"
 
     }

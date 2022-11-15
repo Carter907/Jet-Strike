@@ -10,8 +10,9 @@ public class GameMapRenderer extends OrthogonalTiledMapRenderer {
 
     public enum Maps {
 
-        BLACKHOLE(new TmxMapLoader().load("Maps/blackhole.tmx")),
-        AT_SEA(new TmxMapLoader().load("Maps/atSea.tmx"));
+        ELECTROCRONIC(new TmxMapLoader().load("Maps/Electrocronic.tmx")),
+        BLACKHOLE(new TmxMapLoader().load("Maps/TestMap.tmx")),
+        AT_SEA(new TmxMapLoader().load("Maps/TestMap.tmx"));
 
         private final TiledMap map;
 

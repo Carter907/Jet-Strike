@@ -1,10 +1,8 @@
 package com.mygdx.game.item.projectiles;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.Game;
+import screens.GameScreen;
 import com.mygdx.game.GameAnimation;
 import com.mygdx.game.actors.Enemy;
 import com.mygdx.game.actors.Ship;
@@ -20,8 +18,8 @@ public class Rocket extends Projectile {
 
     }
 
-    public static final TextureRegion sprite = Game.game.getSprites().findRegion("rocket");
-    public static final float maxDistance = 400;
+    public static final TextureRegion sprite = GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/rocket");
+    public static final float maxDistance = 1000;
     public static final float fireRate = 100;
 
     public static final float pixelsPerSecond = 500;
@@ -35,15 +33,15 @@ public class Rocket extends Projectile {
     @Override
     public void onShipCollision(Ship ship) {
         this.setAnimation(RocketAnimations.ROCKET_EXPLOSION.getAnimation());
-        Game.game.getDisplay().getActors().removeValue(ship, false);
+        GameScreen.game.getDisplay().getActors().removeValue(ship, false);
         Enemy.killCount++;
-        Game.game.getKillCount().setText("Kill Count: " + Enemy.killCount);
+        GameScreen.game.getKillCount().setText("Kill Count: " + Enemy.killCount);
     }
 
 
     public static void shootProjectile(Ship jet, float accuracy) {
 
-        if (Game.game.getStateTime() * 1000 >= jet.getTimeSinceLastShot() + fireRate) {
+        if (GameScreen.game.getStateTime() * 1000 >= jet.getTimeSinceLastShot() + fireRate) {
             System.out.println(jet.getRotation());
             Projectile rocket = new Rocket(
 
@@ -51,8 +49,8 @@ public class Rocket extends Projectile {
                     (float) ((jet.getY() + jet.getOriginY()) + ((jet.getWidth() / 2 + 10) * Math.sin(Math.toRadians(jet.getRotation())))),
                     jet.getRotation(), jet
             );
-            Game.game.getDisplay().addActor(rocket);
-            jet.setTimeSinceLastShot(Game.game.getStateTime() * 1000);
+            GameScreen.game.getDisplay().addActor(rocket);
+            jet.setTimeSinceLastShot(GameScreen.game.getStateTime() * 1000);
         }
     }
 
@@ -63,7 +61,7 @@ public class Rocket extends Projectile {
             case ROCKET_EXPLOSION:
                 return new GameAnimation(
                         1 / 15f,
-                        new TextureAtlas(Gdx.files.internal("RocketAnimations/RocketExplosion.atlas")).getRegions(),
+                        GameScreen.game.getGameStart().getTextureAtlas().findRegions("rocketExplosionImages/sprite"),
                         Animation.PlayMode.LOOP);
 
         }

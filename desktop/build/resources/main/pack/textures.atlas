@@ -1,0 +1,262 @@
+
+textures.png
+size: 128, 32
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+blocks/block
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+blocks/lava
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+blocks/lunarGrass
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+blocks/water
+  rotate: false
+  xy: 56, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+
+textures2.png
+size: 1024, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 2, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 0
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 2, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 1
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 104, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 2
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 104, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 3
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 206, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 4
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 206, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 5
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 308, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 6
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 308, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 7
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 410, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 8
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 410, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 9
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 512, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 10
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 512, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 11
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 614, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 12
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 614, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 13
+rocketExplosionImages/sprite
+  rotate: false
+  xy: 716, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: 14
+
+textures3.png
+size: 1024, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+shipExhaustImages/sprite
+  rotate: false
+  xy: 2, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 0
+shipExhaustImages/sprite
+  rotate: false
+  xy: 74, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 1
+shipExhaustImages/sprite
+  rotate: false
+  xy: 146, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 2
+shipExhaustImages/sprite
+  rotate: false
+  xy: 218, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 3
+shipExhaustImages/sprite
+  rotate: false
+  xy: 290, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 4
+shipExhaustImages/sprite
+  rotate: false
+  xy: 362, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 5
+shipExhaustImages/sprite
+  rotate: false
+  xy: 434, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 6
+shipExhaustImages/sprite
+  rotate: false
+  xy: 506, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 7
+shipExhaustImages/sprite
+  rotate: false
+  xy: 578, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 8
+shipExhaustImages/sprite
+  rotate: false
+  xy: 650, 2
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: 9
+
+textures4.png
+size: 256, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+sprites/bullet
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+sprites/coin
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+sprites/enemyChoppa
+  rotate: false
+  xy: 2, 32
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: -1
+sprites/rocket
+  rotate: false
+  xy: 2, 20
+  size: 38, 10
+  orig: 38, 10
+  offset: 0, 0
+  index: -1
+sprites/ship
+  rotate: false
+  xy: 74, 32
+  size: 70, 30
+  orig: 70, 30
+  offset: 0, 0
+  index: -1

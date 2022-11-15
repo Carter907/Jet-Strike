@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import screens.GameScreen;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -12,6 +13,7 @@ public class DesktopLauncher {
 
 		config.setResizable(true);
 		config.setTitle("JetStrike");
-		new Lwjgl3Application(new Game(), config);
+		TexturePacker.process("assets/images", "assets/pack", "textures");
+		new Lwjgl3Application(new JSGameStart(), config);
 	}
 }

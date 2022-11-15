@@ -2,15 +2,17 @@ package com.mygdx.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.Game;
+import com.badlogic.gdx.utils.Timer;
+import screens.GameScreen;
 import com.mygdx.game.InputHandler;
 import com.mygdx.game.item.ForceField;
 import com.mygdx.game.item.projectiles.Projectile;
 
 public class Enemy extends Ship {
 
-    public static final float difficultyLevel = 80f;
     public static int killCount = 0;
+
+    public static EnemyHandler enemyHandler = new EnemyHandler(true, 80f);
     private boolean aggressive;
 
     private enum EnemyAnimations {
@@ -19,15 +21,15 @@ public class Enemy extends Ship {
 
     }
     private final Color forceFieldColor = Color.RED;
-    private final TextureRegion sprite = Game.game.getSprites().findRegion("enemyChoppa");
+    private final TextureRegion sprite = GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa");
     public Enemy() {
-        super(0,0, Game.game.getSprites().findRegion("enemyChoppa"));
+        super(0,0, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa"));
         setForceFieldColor(forceFieldColor);
         aggressive = false;
     }
 
     public Enemy(float x, float y) {
-        super(x,y, Game.game.getSprites().findRegion("enemyChoppa"));
+        super(x,y, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa"));
         setForceFieldColor(forceFieldColor);
         aggressive = false;
     }
@@ -35,13 +37,13 @@ public class Enemy extends Ship {
     private void fight(float direction, float speed) {
         if (aggressive) {
             this.moveShip(direction,speed);
-            this.shootProjectile(Projectile.ProjectileType.BULLET, difficultyLevel);
+            this.shootProjectile(Projectile.ProjectileType.BULLET, enemyHandler.getDifficultyLevel());
         }
     }
 
     public static void AgroAllEnemies(float x, float y, float speed) {
 
-        for (Ship ship : Game.game.getInputHandler().getShips()) {
+        for (Ship ship : GameScreen.game.getInputHandler().getShips()) {
 
             if (ship instanceof Enemy) {
                 Enemy enemy = (Enemy)ship;
@@ -65,8 +67,9 @@ public class Enemy extends Ship {
         enemyJet.setPosition(x-enemyJet.getOriginX(), y-enemyJet.getOriginY());
         enemyJet.setForceField(new ForceField(enemyJet));
 
-        Game.game.getDisplay().addActor(enemyJet);
+        GameScreen.game.getDisplay().addActor(enemyJet);
     }
+
 }
 
 

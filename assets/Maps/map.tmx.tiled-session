@@ -3,22 +3,31 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "blackhole.tmx",
+    "activeFile": "atSea.tmx",
     "expandedProjectPaths": [
         "C:/Users/carte/OneDrive/Documents/GDX Projects/JetStrike/assets/Pngs"
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "C:/Users/carte/OneDrive/Documents/GDX Projects/JetStrike/assets/Pngs/Blocks/TileSet.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "atSea.tmx": {
+            "scale": 0.1674375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1603.5834266517359,
+                "y": 2726.3904441955956
+            }
+        },
         "blackhole.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 140.66666666666663,
-                "y": 514
+                "y": 262
             }
         },
         "block.tsx": {
@@ -38,8 +47,8 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1998.4848484848485,
-                "y": 4892.424242424242
+                "x": 1995.4545454545453,
+                "y": 4446.969696969697
             }
         }
     },
@@ -52,17 +61,19 @@
     "map.width": 70,
     "openFiles": [
         "map1.tmx",
-        "C:/Users/carte/OneDrive/Documents/GDX Projects/JetStrike/assets/Pngs/Blocks/TileSet.tsx",
-        "blackhole.tmx"
+        "blackhole.tmx",
+        "map.tmx",
+        "atSea.tmx"
     ],
     "project": "map.tmx.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "blackhole.tmx",
-        "C:/Users/carte/OneDrive/Documents/GDX Projects/JetStrike/assets/Pngs/Blocks/TileSet.tsx",
         "map1.tmx",
-        "block.tsx",
-        "map.tmx"
+        "blackhole.tmx",
+        "map.tmx",
+        "atSea.tmx",
+        "C:/Users/carte/OneDrive/Documents/GDX Projects/JetStrike/assets/Pngs/Blocks/TileSet.tsx",
+        "block.tsx"
     ],
     "tileset.lastUsedFilter": "All Files (*)",
     "tileset.lastUsedFormat": "tsx",

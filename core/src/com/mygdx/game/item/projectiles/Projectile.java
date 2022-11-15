@@ -1,14 +1,10 @@
 package com.mygdx.game.item.projectiles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Game;
 import com.mygdx.game.GameAnimation;
-import com.mygdx.game.actors.Enemy;
 import com.mygdx.game.actors.Ship;
 
 public abstract class Projectile extends Actor {
