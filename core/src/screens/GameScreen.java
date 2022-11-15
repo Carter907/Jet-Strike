@@ -89,10 +89,10 @@ public class GameScreen extends UIScreen {
 
 
         coinLabel = new Label("Coins Collected: " + player.getCoins(), uiSkin);
-        coinLabel.setPosition(ui.getViewport().getScreenWidth()/2f+200, ui.getViewport().getScreenHeight()-coinLabel.getHeight()-15);
+        coinLabel.setPosition(ui.getViewport().getScreenWidth()/2f+150, ui.getViewport().getScreenHeight()-coinLabel.getHeight()-15);
         coinLabel.setColor(Color.GOLD);
         Image coinPng = new Image(new Texture(Gdx.files.internal("images/sprites/coin.png")));
-        coinPng.setPosition(ui.getViewport().getScreenWidth()/2f+200+coinLabel.getWidth()+10, ui.getViewport().getScreenHeight()-coinLabel.getHeight()-10);
+        coinPng.setPosition(ui.getViewport().getScreenWidth()/2f+coinLabel.getWidth()+10+150, ui.getViewport().getScreenHeight()-coinLabel.getHeight()-10);
 
         killCountLabel = new Label("Kill Count: " + Enemy.killCount, uiSkin);
         killCountLabel.setPosition(20, ui.getViewport().getWorldHeight() - killCountLabel.getHeight()-10);

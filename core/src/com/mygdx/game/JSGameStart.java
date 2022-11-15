@@ -12,6 +12,7 @@ public class JSGameStart extends Game {
     private TextureAtlas textureAtlas;
     @Override
     public void create() {
+
         textureAtlas = new TextureAtlas(Gdx.files.internal("pack/textures.atlas"));
         assetManager = new AssetManager();
         this.setScreen(new TitleScreen(this));
