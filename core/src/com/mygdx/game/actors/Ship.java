@@ -71,6 +71,7 @@ public abstract class Ship extends Actor {
     }
     private void findFlip() {
         if (this instanceof Player)
+            System.out.println(this.getRotation());
         if ((getRotation() > 90 && getRotation() < 270) && !sprite.isFlipY()) {
             sprite.flip(false,true);
         } else if (!(getRotation() > 90 && getRotation() < 270) && sprite.isFlipY())
