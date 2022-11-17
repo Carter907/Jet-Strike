@@ -80,15 +80,8 @@ public class GameScreen extends UIScreen {
                 0);
         mapRenderer.setSpawnPoint(spawnPoint);
 
-        player = new Player();
-        player.setPosition(spawnPoint.x, spawnPoint.y);
-        player.setOrigin(Align.center);
-        player.setForceField(new ForceField(player));
 
-        display.addActor(player);
-
-
-        coinLabel = new Label("Coins Collected: " + player.getCoins(), uiSkin);
+        coinLabel = new Label("Coins Collected: " + 0, uiSkin);
         coinLabel.setPosition(ui.getViewport().getScreenWidth()/2f+150, ui.getViewport().getScreenHeight()-coinLabel.getHeight()-15);
         coinLabel.setColor(Color.GOLD);
         Image coinPng = new Image(new Texture(Gdx.files.internal("images/sprites/coin.png")));
@@ -105,6 +98,15 @@ public class GameScreen extends UIScreen {
 
         deathLabel.setPosition(ui.getViewport().getScreenWidth()/2f-(deathLabel.getWidth()/2f), ui.getViewport().getScreenHeight()/2f-(deathLabel.getHeight()/2));
         deathLabel.setVisible(false);
+
+        player = new Player();
+        player.setPosition(spawnPoint.x, spawnPoint.y);
+        player.setOrigin(Align.center);
+        player.setForceField(new ForceField(player));
+
+        display.addActor(player);
+
+
 
 
         ui.getActors().add(coinLabel);

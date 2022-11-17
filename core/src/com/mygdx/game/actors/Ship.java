@@ -50,6 +50,8 @@ public abstract class Ship extends Actor {
         this.health = 100;
         this.sprite = sprite;
         this.setBounds(x, y, sprite.getRegionWidth(), sprite.getRegionHeight());
+
+
     }
 
     @Override
@@ -57,12 +59,22 @@ public abstract class Ship extends Actor {
 
         this.forceField.draw(batch, parentAlpha);
         if (animation == null) {
+            findFlip();
             batch.draw(this.sprite, getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         } else {
-            batch.draw(this.animation.getKeyFrame(GameScreen.game.getStateTime()), getX(), getY(), getOriginX(),
+            sprite = this.animation.getKeyFrame(GameScreen.game.getStateTime());
+            findFlip();
+            batch.draw(sprite, getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
+    }
+    private void findFlip() {
+        if (this instanceof Player)
+        if ((getRotation() > 90 && getRotation() < 270) && !sprite.isFlipY()) {
+            sprite.flip(false,true);
+        } else if (!(getRotation() > 90 && getRotation() < 270) && sprite.isFlipY())
+            sprite.flip(false,true);
     }
 
     @Override
@@ -90,6 +102,8 @@ public abstract class Ship extends Actor {
 
         this.setX((float) (this.getX() + speed * Math.cos(Math.toRadians(direction))));
         this.setY((float) (this.getY() + speed * Math.sin(Math.toRadians(direction))));
+        if (direction < 0)
+            direction = 360 - Math.abs(direction);
         this.setRotation(direction);
     }
 

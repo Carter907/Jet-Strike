@@ -33,9 +33,11 @@ public class HelpScreen extends UIScreen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Label label = new Label("JetStrike is a fighter game where you have to destroy enemy \nChoppas! Enemies will spawn near the Button left \nside of the map.\n"
-                + "To click in the direction you want to fire in order\n to engage targets. Enemies will fight back \nand have a range at which they can see you", uiSkin);
+        Label label = new Label("JetStrike is a fighter game where you have to destroy enemy helicopters!\n Enemies spawn randomly around the map.\n"
+                + "To click in the direction you want to fire in order to engage targets.\n\n Enemies will fight back \nand have a unlimited range.\n\n" +
+                "Collect coins around the map. See if you can get to 10 before you die. good luck!", uiSkin);
         label.setAlignment(Align.left, Align.left);
+        label.setColor(1f,1f,0f,1f);
 
         TextButton back = new TextButton("back", uiSkin);
         back.addListener(new InputListener() {
@@ -44,7 +46,6 @@ public class HelpScreen extends UIScreen {
 
                 gameStart.setScreen(new TitleScreen(gameStart));
                 dispose();
-                System.out.println("clicked");
                 return true;
             }
 
@@ -52,7 +53,7 @@ public class HelpScreen extends UIScreen {
 
         VerticalGroup ui = new VerticalGroup();
         ui.space(40);
-        ui.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, Align.center);
+        ui.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f+label.getHeight()/2, Align.center);
         ui.addActor(label);
         ui.addActor(back);
 

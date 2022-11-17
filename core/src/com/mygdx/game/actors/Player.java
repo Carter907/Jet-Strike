@@ -19,7 +19,6 @@ public class Player extends Ship {
 
     }
     private boolean godMode;
-
     private int coins;
     private boolean dead;
     private final Color forceFieldColor = Color.GREEN;
@@ -28,6 +27,7 @@ public class Player extends Ship {
         super(0, 0, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/ship"));
         this.dead = false;
         this.godMode = false;
+        this.setCoins(0);
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(PlayerAnimations.JET_EXHAUST.getAnimation());
 
@@ -37,6 +37,7 @@ public class Player extends Ship {
         super(x, y, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/ship"));
         this.dead = false;
         this.godMode = false;
+        this.setCoins(0);
         this.setForceFieldColor(forceFieldColor);
         this.setAnimation(PlayerAnimations.JET_EXHAUST.getAnimation());
     }
@@ -57,6 +58,7 @@ public class Player extends Ship {
 
     public void setCoins(int coins) {
         this.coins = coins;
+        GameScreen.game.getCoinLabel().setText("Coins Collected: " + coins);
     }
 
     public int getCoins() {

@@ -39,14 +39,14 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println(keycode + " pressed");
+        //System.out.println(keycode + " pressed");
         this.keycodes.add(keycode);
         return keyPressed = true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        System.out.println(keycode + " released");
+        //System.out.println(keycode + " released");
         this.keycodes.remove(keycode);
         return keyPressed = false;
     }
@@ -58,14 +58,14 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("down");
+        //System.out.println("down");
         mousePressing = true;
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        System.out.println("up");
+        //System.out.println("up");
         mousePressing = false;
         return true;
     }
@@ -94,9 +94,11 @@ public class InputHandler extends InputAdapter {
         handleMousePosition();
         projectiles = findProjectiles();
         ships = findShips();
+        interactables = findInteractables();
         mouseDirection = game.getPlayer().getMouseDirection(mouseXUnproj, mouseYUnproj);
         updateProjectiles();
         checkProjectiles();
+        checkInteractables();
         Enemy.AgroAllEnemies(game.getPlayer().getX(), game.getPlayer().getY(), 3f);
 
         if (!game.getDisplay().getActors().contains(game.getPlayer(), false))
@@ -124,15 +126,14 @@ public class InputHandler extends InputAdapter {
 
         }
         if (Enemy.enemyHandler.isRandomEnemySpawn()) {
-            System.out.println(game.getMapRenderer().getMapHeight());
-            System.out.println(game.getMapRenderer().getMapWidth());
+
             Enemy.enemyHandler.getEnemySpawner().scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     Coin.addCoin(
                             (float) (Math.random() * game.getMapRenderer().getMapWidth() * 16),
                             (float) (Math.random() * game.getMapRenderer().getMapHeight() * 16),
-                    Coin.CoinType.NORMAL_COIN);
+                            Coin.CoinType.NORMAL_COIN);
                     Enemy.spawnEnemy(
                             (float) (Math.random() * game.getMapRenderer().getMapWidth() * 16),
                             (float) (Math.random() * game.getMapRenderer().getMapHeight()) * 16);
@@ -204,15 +205,15 @@ public class InputHandler extends InputAdapter {
     }
 
     private void checkInteractables() {
-        for (Ship ship: ships) {
+        for (Ship ship : ships) {
             for (Interactable intera : interactables) {
-                ship.contains(intera.getX(), intera.getY());
+                if (ship.contains(intera.getX(), intera.getY())) {
+                    game.getDisplay().getActors().removeValue(intera, false);
+                    if (ship instanceof Player && intera instanceof Coin) {
+                        Player player = (Player) ship;
+                        player.setCoins(player.getCoins() + ((Coin) intera).getValue());
 
-                game.getDisplay().getActors().removeValue(intera, false);
-                if (ship instanceof Player && intera instanceof Coin) {
-                    Player player = (Player) ship;
-                    player.setCoins(player.getCoins() + ((Coin)intera).getValue());
-
+                    }
                 }
 
             }
@@ -220,6 +221,7 @@ public class InputHandler extends InputAdapter {
 
 
     }
+
     private void updateKillLabel(int kills) {
         game.getCoinLabel().setText("kill count: " + kills);
     }

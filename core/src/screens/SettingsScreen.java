@@ -47,7 +47,6 @@ public class SettingsScreen extends UIScreen {
 
                 gameStart.setScreen(new TitleScreen(gameStart));
                 dispose();
-                System.out.println("clicked");
                 return true;
             }
 

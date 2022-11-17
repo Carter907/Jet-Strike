@@ -53,7 +53,6 @@ public class Bullet extends Projectile {
     public static void shootProjectile(Ship jet) {
 
         if (GameScreen.game.getStateTime() * 1000 >= jet.getTimeSinceLastShot() + fireRate) {
-            System.out.println(jet.getRotation());
             Projectile rocket = new Bullet(
 
                     (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(jet.getRotation())))),
@@ -67,7 +66,6 @@ public class Bullet extends Projectile {
     public static void shootProjectile(Ship jet, float accuracy) {
 
         if (GameScreen.game.getStateTime() * 1000 >= jet.getTimeSinceLastShot() + fireRate) {
-            System.out.println(jet.getRotation());
             Projectile rocket = new Bullet(
 
                     (float) ((jet.getX() + jet.getOriginX()) + ((jet.getWidth() / 2 + 10) * Math.cos(Math.toRadians(+jet.getRotation())))),

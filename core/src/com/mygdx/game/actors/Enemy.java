@@ -1,6 +1,7 @@
 package com.mygdx.game.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Timer;
 import screens.GameScreen;
@@ -23,13 +24,13 @@ public class Enemy extends Ship {
     private final Color forceFieldColor = Color.RED;
     private final TextureRegion sprite = GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa");
     public Enemy() {
-        super(0,0, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa"));
+        super(0,0, new TextureRegion(GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa")));
         setForceFieldColor(forceFieldColor);
         aggressive = false;
     }
 
     public Enemy(float x, float y) {
-        super(x,y, GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa"));
+        super(x,y, new TextureRegion(GameScreen.game.getGameStart().getTextureAtlas().findRegion("sprites/enemyChoppa")));
         setForceFieldColor(forceFieldColor);
         aggressive = false;
     }
