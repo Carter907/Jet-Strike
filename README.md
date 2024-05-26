@@ -8,3 +8,7 @@
 - your life span is described by the green force field around your character. 
 
 - press shift to increase speed.
+
+### Ui
+here is a screenshot of the main menu when you being playing
+![main menu](github/main-menu.png)
