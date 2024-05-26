@@ -9,6 +9,6 @@
 
 - press shift to increase speed.
 
-### Ui
+### UI
 here is a screenshot of the main menu when you being playing
 ![main menu](github/main-menu.png)
